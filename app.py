@@ -38,14 +38,6 @@ class Favourite(db.Model):
         self.owner = owner
         self.fav = fav
         
-# class bookmarks(db.Model):  
-#   id = db.Column(db.Integer, primary_key=True)
-#   name = db.Column(db.String(50), unique=True, nullable=False)   
-#   book = db.Column(db.String(20), unique=True, nullable=False) 
-#   country = db.Column(db.String(50), nullable=False)  
-#   booker_prize = db.Column(db.Boolean) 
-#   user_id = db.Column(db.Integer)
-
 api = Api(app, prefix="/api/v1")
 auth = HTTPBasicAuth()
 
@@ -76,19 +68,17 @@ class HomeResource(Resource):
     @auth.login_required()
     def get(self):
         print("Hello, {}!".format(auth.current_user()))
+        # headers = {'Content-Type': 'text/html'}
+        # return make_response(render_template('log.html'),200,headers)
+        json_onject = {
+
+            "user":auth.current_user()
+            }
+        r = json.dumps(json_onject)
+        data = json.loads(r)
         headers = {'Content-Type': 'text/html'}
-        return make_response(render_template('log.html'),200,headers)
+        return make_response(render_template("log.html",data = data ),200,headers)
 
-# @app.route("/home")
-# def home():
-#     print("Hello, {}!".format(auth.current_user()))
-#     return {"greetings":"welcome"},200
-
-# class PalleteResource(Resource):
-
-#     def __init__(self):
-#         pass
-    
 
 
 @app.route("/pallete",methods = ["GET","POST"])
@@ -113,7 +103,7 @@ class ManagePalleteResource(Resource):
         pass
 
 
-    @auth.login_required(optional = True)
+    @auth.login_required()
     def get(self,pid):
         
         single_pallete = Pallete.query.get(pid)
@@ -137,6 +127,7 @@ class ManagePalleteResource(Resource):
         state = single_pallete.state
         name = single_pallete.name
         owner = single_pallete.owner
+        print(owner,auth.current_user())
 
         json_onject = {
             "pid":pid,
@@ -238,14 +229,11 @@ class MyBookmarkResource(Resource):
             json_onject = {"pallete":result}
             r = json.dumps(json_onject)
             obj = json.loads(r)
-
-            # return render_template("book_mark.html",data = data )
             headers = {'Content-Type': 'text/html'}
             return make_response(render_template("book_mark.html",data = obj ),200,headers)
         return jsonify({'error': "Not found"})  
 
 
-    # session.query(Pallete).filter(Pallete.id.in_((123,456))).all()
 
 
 @app.route("/logout")
@@ -258,9 +246,6 @@ class Dashboard(Resource):
 
     def __init__(self):
         pass
-
-
-    
     
     @auth.login_required(optional = True)
     def get(self):
@@ -290,9 +275,7 @@ class Dashboard(Resource):
 
 
 
-@app.route("/dashboard")
-
-    # return jsonify({'dashboard': result})  
+# @app.route("/dashboard")
 class MyPalleteResource(Resource):
 
     def __init__(self):
