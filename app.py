@@ -52,6 +52,9 @@ def verify(username, password):
         return False
     return USER_DATA.get(username) == password
 
+@auth.error_handler
+def auth_error(status):
+    return "Access Denied", status
 
 class PrivateResource(Resource):
 
@@ -103,7 +106,7 @@ class ManagePalleteResource(Resource):
         pass
 
 
-    @auth.login_required()
+    @auth.login_required
     def get(self,pid):
         
         single_pallete = Pallete.query.get(pid)
@@ -200,10 +203,10 @@ class BookmarkResource(Resource):
         finally:
             db.session.commit()
 
+        return jsonify({'message': f'successful changes'})
 
 
         
-        return jsonify({'message': f'successful changes'})
 
 class MyBookmarkResource(Resource):
 
