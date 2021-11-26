@@ -10,8 +10,7 @@ app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///pallete.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True 
 
 db = SQLAlchemy(app)
-# db.session.execute('CREATE TABLE IF NOT EXISTS pallete (id INTEGER PRIMARY KEY AUTOINCREMENT, roomname TEXT, key TEXT, email NOT NULL UNIQUE)')
-# db.session.commit()
+
 
 
 class Pallete(db.Model):  
@@ -37,14 +36,21 @@ class Favourite(db.Model):
     def __init__(self,owner, fav):
         self.owner = owner
         self.fav = fav
-        
-# class bookmarks(db.Model):  
-#   id = db.Column(db.Integer, primary_key=True)
-#   name = db.Column(db.String(50), unique=True, nullable=False)   
-#   book = db.Column(db.String(20), unique=True, nullable=False) 
-#   country = db.Column(db.String(50), nullable=False)  
-#   booker_prize = db.Column(db.Boolean) 
-#   user_id = db.Column(db.Integer)
+
+class Dominant(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+    color = db.Column(db.String(50))
+    def __init__(self,color):
+        self.color = color
+
+class Accent(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+    color = db.Column(db.String(50))
+    def __init__(self,color):
+        self.color = color
+
 
 api = Api(app, prefix="/api/v1")
 auth = HTTPBasicAuth()
@@ -61,6 +67,8 @@ def verify(username, password):
     return USER_DATA.get(username) == password
 
 
+
+
 class PrivateResource(Resource):
 
     @auth.login_required
@@ -68,35 +76,85 @@ class PrivateResource(Resource):
         return {"meaning_of_life": 42}
 
 
-class HomeResource(Resource):
+class CreatePalleteResource(Resource):
 
     def __init__(self):
         pass
     
     @auth.login_required()
     def get(self):
-        print("Hello, {}!".format(auth.current_user()))
+        dominant = Dominant.query.all()
+        accent = Accent.query.all()
+        
+        dom_list= []
+        for dom in dominant:
+            colors = {}
+            colors ['id'] = dom.id
+            colors ['color'] = dom.color
+            dom_list.append(colors)
+        
+        accent_list = []
+        for acc in accent:
+            colors = {}
+            colors ['id'] = acc.id
+            colors ['color'] = acc.color
+            accent_list.append(colors)
+        
+        obj = {
+            "dominant":dom_list,
+            "accent":accent_list,
+            "user":auth.current_user()
+        }
+
+        r = json.dumps(obj)
+        data = json.loads(r)
+
         headers = {'Content-Type': 'text/html'}
-        return make_response(render_template('log.html'),200,headers)
+        return make_response(render_template('public_view.html',data = data ),200,headers)
 
-# @app.route("/home")
-# def home():
-#     print("Hello, {}!".format(auth.current_user()))
-#     return {"greetings":"welcome"},200
+    @auth.login_required()
+    def post(self):
+        data = request.json
+        pallete = Pallete( owner = auth.current_user(), name=data['name'], dominant=str(data['dominant']), accent = str(data['accent']) ,state = data['state']) 
+        db.session.add(pallete)
+        db.session.commit()   
+        print(str(data['accent']))
+        return {'success':True}, 200, {'ContentType':'application/json'} 
 
-# class PalleteResource(Resource):
-
-#     def __init__(self):
-#         pass
-    
 
 
 @app.route("/pallete",methods = ["GET","POST"])
 @auth.login_required
 def pallete():
     if request.method == "GET":
-        print("Hello, {}!".format(auth.current_user()))
-        return render_template('log.html'),200
+        dominant = Dominant.query.all()
+        accent = Accent.query.all()
+        
+        dom_list= []
+        for dom in dominant:
+            colors = {}
+            colors ['id'] = dom.id
+            colors ['color'] = dom.color
+            dom_list.append(colors)
+        
+        accent_list = []
+        for acc in accent:
+            colors = {}
+            colors ['id'] = acc.id
+            colors ['color'] = acc.color
+            accent_list.append(colors)
+        
+        obj = {
+            "dominant":dom_list,
+            "accent":accent_list,
+            "user":auth.current_user()
+        }
+
+        r = json.dumps(obj)
+        data = json.loads(r)
+
+        headers = {'Content-Type': 'text/html'}
+        return render_template('public_view.html',data = data ),200
 
     if request.method == "POST":
         data = request.json
@@ -112,14 +170,29 @@ class ManagePalleteResource(Resource):
     def __init__(self):
         pass
 
-
-    @auth.login_required(optional = True)
+    @auth.login_required
     def get(self,pid):
         
         single_pallete = Pallete.query.get(pid)
         if not single_pallete:
             return jsonify({'message': 'not found'})   
+        dominant = Dominant.query.all()
+        accent = Accent.query.all()
         
+        dom_list= []
+        for dom in dominant:
+            colors = {}
+            colors ['id'] = dom.id
+            colors ['color'] = dom.color
+            dom_list.append(colors)
+        
+        accent_list = []
+        for acc in accent:
+            colors = {}
+            colors ['id'] = acc.id
+            colors ['color'] = acc.color
+            accent_list.append(colors)
+    
         dominant = single_pallete.dominant.strip('[]').replace('\'', '').replace(' ', '').split(',')
         dominant_int = list(map(int, dominant))
         dominant_array = [0]*8
@@ -134,24 +207,37 @@ class ManagePalleteResource(Resource):
             accent_array[idx] = 1
         print(accent_array)
 
+        bookmark = Favourite.query.filter_by(owner = auth.current_user()).first()
+        if bookmark:
+            favourite = set(bookmark.fav.split(','))
+
+            if pid in favourite:
+                bookmark = True
+                print(bookmark)
+            else:
+                bookmark = False
+
         state = single_pallete.state
         name = single_pallete.name
         owner = single_pallete.owner
 
         json_onject = {
             "pid":pid,
-            "accent":accent_array[1:],
-            "dominant" : dominant_array[1:], 
+            "dominant":dom_list,
+            "accent":accent_list,
+            "accent_array":accent_array,
+            "dominant_array" : dominant_array, 
             "state":state, 
             "name":name,
             "owner":owner,
-            "user":auth.current_user()
+            "user":auth.current_user(),
+            "bookmark":bookmark
             }
         r = json.dumps(json_onject)
         data = json.loads(r)
-        # return render_template("edit_pallete.html",data = data )
+
         headers = {'Content-Type': 'text/html'}
-        return make_response(render_template("edit_pallete.html",data = data ),200,headers)
+        return make_response(render_template("test_edit.html",data = data ),200,headers)
 
     @auth.login_required()
     def delete(self,pid):
@@ -170,8 +256,9 @@ class ManagePalleteResource(Resource):
         if not edit_pallete:   
             return jsonify({'message': 'you are not authorized to...'})
         print(edit_pallete.name)
+
         data = request.json
-        pallete = Pallete( owner = auth.current_user(), name=data['name'], dominant=str(data['dominant']), accent = str(data['accent']) ,state = data['state']) 
+
         edit_pallete.name = data['name']
         edit_pallete.dominant = str(data['dominant'])
         edit_pallete.accent = str(data['accent'])
@@ -181,7 +268,7 @@ class ManagePalleteResource(Resource):
         return jsonify({'message': 'Pallete edited'})
 
 
-class BookmarkResource(Resource):
+class CreateBookmarkResource(Resource):
 
     def __init__(self):
         pass
@@ -207,11 +294,7 @@ class BookmarkResource(Resource):
             book_mark.fav = fav
             print("Something went wrong")
         finally:
-            db.session.commit()
-
-
-
-        
+            db.session.commit()        
         return jsonify({'message': f'successful changes'})
 
 class MyBookmarkResource(Resource):
@@ -239,13 +322,12 @@ class MyBookmarkResource(Resource):
             r = json.dumps(json_onject)
             obj = json.loads(r)
 
-            # return render_template("book_mark.html",data = data )
             headers = {'Content-Type': 'text/html'}
             return make_response(render_template("book_mark.html",data = obj ),200,headers)
         return jsonify({'error': "Not found"})  
 
 
-    # session.query(Pallete).filter(Pallete.id.in_((123,456))).all()
+# session.query(Pallete).filter(Pallete.id.in_((123,456))).all()
 
 
 @app.route("/logout")
@@ -259,9 +341,6 @@ class Dashboard(Resource):
     def __init__(self):
         pass
 
-
-    
-    
     @auth.login_required(optional = True)
     def get(self):
 
@@ -287,12 +366,6 @@ class Dashboard(Resource):
         headers = {'Content-Type': 'text/html'}
         return make_response(render_template("book_mark.html",data = data ),200,headers)
 
-
-
-
-@app.route("/dashboard")
-
-    # return jsonify({'dashboard': result})  
 class MyPalleteResource(Resource):
 
     def __init__(self):
@@ -323,7 +396,7 @@ class MyPalleteResource(Resource):
         json_onject = {"pallete":result}
         r = json.dumps(json_onject)
         data = json.loads(r)
-        # return render_template("book_mark.html",data = data )
+        
         headers = {'Content-Type': 'text/html'}
         return make_response(render_template("book_mark.html",data = data ),200,headers)
 
@@ -331,8 +404,8 @@ class MyPalleteResource(Resource):
 
 
 api.add_resource(PrivateResource, '/private')
-api.add_resource(HomeResource, '/home')
-api.add_resource(BookmarkResource, '/bookmark/<pid>')
+api.add_resource(CreatePalleteResource, '/home')
+api.add_resource(CreateBookmarkResource, '/bookmark/<pid>')
 api.add_resource(ManagePalleteResource, '/pallete/<pid>')
 api.add_resource(MyBookmarkResource, '/my_bookmark')
 api.add_resource(MyPalleteResource, '/my_pallete')

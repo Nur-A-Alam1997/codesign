@@ -1,0 +1,166 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    {% for col in data['dominant']%}
+    {%if loop.index == 1 %}
+    <input class="accent-checkbox" type="checkbox" name="color" value="{{col['id']}}" checked>{{ col['color'] }}<br>
+    {% else %}
+    <input class="accent-checkbox" type="checkbox" name="color" value="{{col['id']}}">{{ col['color'] }}<br>
+    {% endif%}
+
+    {%endfor%}
+</body>
+
+</html>
+
+ -->
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+
+<body>
+
+    <div class="dominating-color">
+        <p><strong>Which level would you like? (Select 3 Levels)</strong></p>
+        {% for col in data['dominant']%}
+        {%if loop.index == 1 %}
+        <input class="dominant-checkbox" type="checkbox" name="color" value="{{col['id']}}" checked>{{ col['color'] }}<br>
+            {% else %}
+        <input class="dominant-checkbox" type="checkbox" name="color" value="{{col['id']}}">{{ col['color'] }}<br>
+        {% endif%}
+        {%endfor%}
+    </div>
+    <div class="accent-color">
+        <p><strong>Which level would you like? (Select 3 Levels)</strong></p>
+        {% for col in data['accent']%}
+        {%if (loop.index == 1) or (loop.index == 2) %}
+        <input class="accent-checkbox" type="checkbox" name="color" value="{{col['id']}}" checked>{{ col['color'] }}<br>
+            {% else %}
+        <input class="accent-checkbox" type="checkbox" name="color" value="{{col['id']}}">{{ col['color'] }}<br>
+        {% endif%}
+        {%endfor%}
+    </div>
+
+    <div>
+        <h1>Pallete name (default pallete1)</h1>
+        <input type="text" maxlength="512" id="Pname" />
+        <input class="public-checkbox" type="checkbox" name="color" value="bool" checked>Public<br>
+
+    </div>
+
+    {{data['user']}}
+    {%if data['user'] %}
+    <button onclick="logout()">submit </button>
+    {% endif %}
+</body>
+<script>
+    const limit = 3;
+    $('input.dominant-checkbox').on('change', function (evt) {
+        if ($(this).siblings(':checked').length >= limit) {
+            this.checked = false;
+        }
+        if ($(this).siblings(':checked').length == 0) {
+            this.checked = true;
+        }
+    });
+
+    const acclimit = 4;
+    $('input.accent-checkbox').on('change', function (evt) {
+        if ($(this).siblings(':checked').length >= acclimit) {
+            this.checked = false;
+        }
+        if ($(this).siblings(':checked').length == 1) {
+            this.checked = true;
+        }
+    });
+
+
+    // $('.input.single-checkbox  option:selected').each(function () {
+    //     array[$(this).val()] = $(this).value();
+    //     console.log(array)
+    // });
+
+
+    function logout() {
+
+        let myArray = (function () {
+            let a = [];
+            $(".dominant-checkbox:checked").each(function () {
+                a.push(this.value);
+            });
+            console.log(a)
+            return a;
+        })()
+
+        let accent = (function () {
+            let accent = [];
+            $(".accent-checkbox:checked").each(function () {
+                accent.push(this.value);
+            });
+            console.log(accent)
+            return accent;
+        })()
+        var name = document.getElementById('Pname').value
+        console.log(myArray, accent, name)
+        if (name == "") { name = "Pallete" }
+
+        var boolean = null
+        // $('input.public-checkbox')
+        var checkbox = $('input.public-checkbox');
+
+        if (checkbox.is(':checked')) {
+            console.log('The checkbox is checked');
+            boolean = true;
+        } else {
+            console.log('The checkbox is not checked');
+            boolean = false;
+        }
+        console.log(boolean);
+
+        var obj = {
+            "name": name,
+            "dominant": myArray,
+            "accent": accent,
+            "state": boolean
+        }
+        // To invalidate a basic auth login:
+        // 
+        // 	1. Call this logout function.
+        //	2. It makes a GET request to an URL with false Basic Auth credentials
+        //	3. The URL returns a 401 Unauthorized
+        // 	4. Forward to some "you-are-logged-out"-page
+        // 	5. Done, the Basic Auth header is invalid now
+        $.ajax({
+            url: "/pallete",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(obj),
+            success: function (data) { alert("palette created") }
+        });
+    }
+</script>
+
+</html>

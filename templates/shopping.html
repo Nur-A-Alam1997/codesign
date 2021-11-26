@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>My First App</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.24.0/babel.js"></script>
+    <!-- <script src="https://unpkg.com/bazar@0.5.2/dist/bazar.js"></script> -->
+</head>
+
+<body>
+    <style>
+        @import url("https://fonts.googleapis.com/css?family=Nunito+Sans:400,800");
+
+        body {
+            font-family: "Nunito Sans", sans-serif;
+            background: #f9f9f9;
+        }
+
+        .Cart {
+            max-width: 800px;
+            display: block;
+            margin: auto;
+            font-family: "Nunito Sans", sans-serif;
+            font-weight: 800;
+        }
+
+        .Cart ul {
+            list-style-type: none;
+        }
+
+        .Cart li {
+            max-width: 400px;
+            padding-top: 10px;
+            margin-bottom: 30px;
+        }
+
+        .Cart li,
+        .Cart button {
+            margin-right: 10px;
+        }
+
+        .Cart button {
+            cursor: pointer;
+            float: right;
+            border: none;
+            border-radius: 4px;
+            background: #D8D8D8;
+            box-shadow: 0px 2px 9px rgba(0, 0, 0, 0.2);
+            padding: 5px;
+            transform: translatey(-5px);
+        }
+
+        .cartTotal {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            color: #0e5c2c;
+            font-family: "Nunito Sans", sans-serif;
+            font-weight: 800;
+            font-size: 48px;
+            background: #a2bb98;
+            border: 10px solid #0e5c2c;
+            box-shadow: 0px 2px 9px rgba(0, 0, 0, 0.2);
+            border-radius: 6px 0 0 0;
+            padding: 10px 20px;
+        }
+
+        .cartColor {
+            min-width: 90px;
+            padding: 10px 20px;
+            border-radius: 4px;
+            box-shadow: 0px 2px 9px rgba(0, 0, 0, 0.2);
+        }
+
+        .cartColorQty,
+        .cartColorImport {
+            width: 80px;
+            float: right;
+        }
+
+        .wall {
+            /* columns:4;
+  column-gap: 1em; */
+            max-width: 800px;
+            display: block;
+            margin: auto;
+            padding-top: 60px;
+        }
+
+        .brick {
+            margin: 20px;
+            height: 180px;
+            width: 150px;
+            margin-bottom: 1em;
+            clear: both;
+            background: #fff;
+            box-shadow: 0px 2px 9px rgba(0, 0, 0, 0.2);
+            transition: all 0.5s;
+            border-radius: 6px;
+            display: inline-block;
+        }
+
+        .brick:hover {
+            box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.2) !important;
+        }
+
+        .color {
+            grid-area: color;
+            position: relative;
+            height: 120px !important;
+        }
+
+        .content {
+            height: 100%;
+            display: grid;
+            grid-template-columns: 10px auto 10px;
+            grid-template-areas:
+                ". color ."
+                ". action .";
+        }
+
+        .action {
+            /* border: 1px solid red; */
+            grid-area: action;
+
+            display: grid;
+            grid-template-columns: auto auto;
+        }
+
+        .action p {
+            /* padding: 0; */
+            font-weight: 800;
+            margin: auto;
+        }
+
+        .buyButton {
+            cursor: pointer;
+
+            font-weight: 800;
+            color: #fff;
+
+            width: 68px;
+            height: 25px;
+            background: linear-gradient(270deg, #ff3d00 -13.97%, #ffa800 105.15%);
+            box-shadow: 0px 2px 9px rgba(0, 0, 0, 0.2);
+            border-radius: 6px;
+            border: none;
+
+            position: relative;
+            top: 50%;
+            left: 15%;
+            transform: translateY(-50%);
+            transition: box-shadow 0.2s;
+        }
+
+        .color h1 {
+            position: absolute;
+            z-index: 2;
+
+            font-size: 46px;
+
+            top: 50%;
+            left: 50%;
+            transform: translate(-40%, -100%);
+        }
+
+        .palette {
+            /* border: 1px solid red; */
+            position: absolute;
+            height: 140px;
+            width: 140px;
+            left: 5px;
+            top: -10px;
+
+            background: #fdff8d;
+            box-shadow: 0px 2px 9px rgba(0, 0, 0, 0.2);
+            border-radius: 6px;
+        }
+
+        button:focus {
+            outline: 0;
+        }
+
+        button:active {
+            box-shadow: none;
+        }
+
+        .navBar {
+            position: fixed;
+
+            font-family: "Nunito Sans", sans-serif;
+            font-weight: 800;
+            text-align: right;
+            right: 0;
+            top: 0;
+            background: #fff;
+            z-index: 999;
+
+            box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.2);
+            border-radius: 0 0 0 6px;
+        }
+
+        .navBar li {
+            position: relative;
+            display: inline-block;
+            padding-right: 50px;
+            cursor: pointer;
+        }
+
+        .navBar li:hover {
+            font-style: italic;
+        }
+
+        .cartQuantity {
+            padding: 0px 5px;
+            border-radius: 6px;
+            color: #000;
+            background: linear-gradient(270deg, #ff3d00 -13.97%, #ffa800 105.15%);
+        }
+    </style>
+
+    <div id='clock'></div>
+    <div id='root'></div>
+
+
+    <script src="https://cdn.jsdelivr.net/react/0.14.0-rc1/react.js"></script>
+    <script src="https://cdn.jsdelivr.net/react/0.14.0-rc1/react-dom.js"></script>
+    <script type="text/babel">
+        const _BAZAR_STORE_ = new Map();
+
+        // Looping through global store and invoking `onEdict` on every element that expressed an interest
+        // on the ID that provoked a notification.
+        const edict = id => {
+            const { sync } = _BAZAR_STORE_.get(id);
+            if (!sync) throw new Error('Sync is required to issue an edict');
+            const state = sync();
+
+            // preferring forEach over a more functional .filter followed by .map
+            // to keep O(n) time complexity when looping through a large store.
+            _BAZAR_STORE_
+                .forEach((obj) => {
+                    // Safely accessing store[id].interests.
+                    // Looping through IDs to check all the components that expressed interest in
+                    // the state change.
+                    if (obj.interests.has(id)) {
+                        const { onEdict } = obj;
+                        // Directly passing id and state at component level to avoid reading from global
+                        onEdict(id, state);
+                    }
+                });
+        };
+
+        // Registering a new component in the global store.
+        // Make sure that `register` function runs only one time per registered component.
+        // Otherwise an error of `Expected unique ID` will be thrown.
+        // e.g. in a React component: Call `register` in the `constructor` method.
+        const register = config => {
+            const { id, interests = [], willRerender, onEdict } = config;
+
+            if (typeof id !== 'string') throw new TypeError('id should be a string');
+            if (_BAZAR_STORE_.has(id) && !willRerender) throw new Error('Expected unique id');
+            if (interests.length > 0 && (typeof onEdict !== 'function')) throw new Error('onEdict is required when expressing interests');
+
+            // Creating instance
+            _BAZAR_STORE_.set(id, {
+                ...config,
+
+                // Preferring an array in config for a more user friendly creation.
+                // Preferring a Set for internal use for a faster property retrieval.
+                interests: new Set(interests),
+            });
+        };
+
+        // The poke function let's you `poke` registered components with a valid `onPoke` function.
+        const poke = (id, arg) => {
+            const { onPoke } = (_BAZAR_STORE_.get(id) || {});
+            if (!onPoke) throw new Error('Poking component without onPoke method');
+            onPoke(arg);
+        };
+
+        // Safely reading synced state from one ID.
+        const getState = id => {
+            const { sync } = (_BAZAR_STORE_.get(id) || {});
+            return sync ? sync() : undefined;
+        };
+
+        // Useful when using bazar for connecting components in a repeating environment.
+        // e.g. Using bazar to connect the widgets of a dashboard. But there are `n` dashboards
+        // made with the same widgets that render different data.
+        // Before registering the new widgets you can clear the store to prevent ID clashes.
+        const clearStore = () => _BAZAR_STORE_.clear();
+
+    </script>
+    {% raw %}
+    <script type="text/babel">
+
+        class ClockFunction extends React.Component {
+
+            constructor() {
+                super();
+                this.state = { time: new Date() }; // initialise the state
+            }
+
+            componentDidMount() { // create the interval once component is mounted
+                this.update = setInterval(() => {
+                    this.setState({ time: new Date() });
+                }, 1 * 1000); // every 1 seconds
+            }
+
+            componentWillUnmount() { // delete the interval just before component is removed
+                clearInterval(this.update);
+            }
+
+            render() {
+                const { time } = this.state; // retrieve the time from state
+
+                return (<div>
+                    <h1>Digital Clock</h1>
+                    <h2>
+                        {/* print the string prettily */}
+                        {time.toLocaleTimeString()}
+                    </h2>
+                </div>);
+            }
+        }
+        ReactDOM.render(<ClockFunction />, document.querySelector('#clock'));
+
+
+
+
+        // Empty bazar store is initialized on first import.
+
+
+        const colors = [
+            { name: "chef", hex: "#FDFF8D", text: "black", price: 615 },
+            { name: "Wine", hex: "#4D1310", text: "white", price: 258 },
+            { name: "Punch", hex: "#EF5678", text: "black", price: 493 },
+            { name: "Blue", hex: "#4342B6", text: "white", price: 807 },
+            { name: "Green", hex: "#3CAF49", text: "black", price: 105 },
+            { name: "Peach", hex: "#F99484", text: "black", price: 752 },
+            { name: "Olive", hex: "#95BE67", text: "black", price: 60 },
+            { name: "Rose", hex: "#DF3034", text: "white", price: 810 },
+            { name: "Mint", hex: "#97ECC2", text: "black", price: 739 },
+            { name: "Lilac", hex: "#B560CA", text: "white", price: 974 },
+            { name: "Oil", hex: "#0D0702", text: "white", price: 153 },
+            { name: "Teal", hex: "#4DA8AB", text: "white", price: 156 },
+            { name: "Slate", hex: "#757A86", text: "white", price: 244 },
+            { name: "Blush", hex: "#FEC4E4", text: "black", price: 981 },
+            { name: "Sky", hex: "#67C3D8", text: "white", price: 239 },
+            { name: "Wood", hex: "#413323", text: "white", price: 343 },
+            { name: "Iris", hex: "#9865C2", text: "white", price: 56 },
+            { name: "Smoke", hex: "#5A525E", text: "black", price: 902 },
+            { name: "Azure", hex: "#2920A2", text: "white", price: 433 },
+            { name: "Basil", hex: "#356132", text: "white", price: 743 }
+        ];
+
+        const Item = props => {
+            const { name, price, hex, text } = props.color;
+
+            const buy = () =>
+                poke("App", {
+                    name,
+                    type: "increment",
+                });
+
+            return (
+                <div className="brick">
+                    <div className="content">
+                        <div className="color" style={{ color: text }}>
+                            <div className="palette" style={{ background: hex }} />
+                            <h1>{name}</h1>
+                        </div>
+                        <div className="action">
+                            <p>$ {price}</p>
+                            <button className="buyButton" onClick={() => buy()}>
+                                Buy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const Shop = props => {
+            const items = () => {
+                return props.colors.map((color, index) => {
+                    return <Item color={color} key={index} />;
+                });
+            };
+
+            return <div className="wall">{items()}</div>;
+        };
+
+        const Cart = props => {
+            let total = 0;
+            const purchases = props.items.map((item, index) => {
+                const { name, hex, price, quantity } = item;
+                const currentImport = quantity * price;
+                total += currentImport;
+                return (
+                    <li key={index}>
+                        <span className="cartColor" style={{ background: hex }}>{name}</span>
+                        <span className="cartColorQty"> x{item.quantity}</span>
+                        
+                        <button onClick={() => poke("App", { name, type: "increment",quantity })}>
+                            ➕
+                        </button>
+                        <button onClick={() => poke("App", { name, type: "decrement",quantity })}>
+                            ➖
+                        </button>
+                        <span className="cartColorImport"> ${currentImport}</span>
+                        <button onClick={() => poke("App", { name, type: "remove",price })}>🍝</button>
+                    </li>
+                );
+            });
+
+            return (
+                <div className="Cart">
+                    <ul>{purchases.length === 0 ? "empty (:" : purchases}</ul>
+                    <div className="cartTotal">$ {total}</div>
+                </div>
+            );
+        };
+
+        const Navbar = props => (
+            <div className="navBar">
+                <ul>
+                    <li onClick={() => props.changeView("shop")}>
+                        <span role="img" aria-label="shop">
+                            🏪{" "}
+                        </span>
+                        <span>Shop</span>
+                    </li>
+                    <li onClick={() => props.changeView("cart")}>
+                        <span role="img" aria-label="shop">
+                            🛒{" "}
+                        </span>
+                        <span>Cart </span>
+                        <span className="cartQuantity">{props.quantity}</span>
+                    </li>
+                </ul>
+            </div>
+        );
+
+        class App extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {
+                    colors: colors.map(e => ({
+                        ...e,
+                        quantity: 0
+                    }))
+                };
+
+                register({
+                    id: "App",
+                    sync: () => this.state,
+                    onPoke: arg => {
+                        const { name, type, quantity } = arg;
+                        console.log('poked', name,type,quantity);
+                        const { colors } = this.state;
+                        this.setState({
+                            colors: colors.map(e => {
+                                const { quantity } = e;
+                                return e.name === name
+                                    ? {
+                                        ...e,
+                                        quantity: (() => {
+                                            if (type === "increment") return quantity + 1;
+                                            else if (type === "remove") return 0;
+                                            return quantity - 1;
+                                        })()
+                                    }
+                                    : e;
+                            })
+                        });
+                    }
+                });
+
+                this.changeView = this.changeView.bind(this);
+            }
+
+            changeView = where => this.setState({ view: where });
+
+            render() {
+                const { view = "shop", colors } = this.state;
+
+                const quantity = colors.map(e => e.quantity).reduce((a, b) => a + b);
+
+                const inCart = colors.filter(e => e.quantity > 0);
+
+                return (
+                    <div className="App">
+                        <Navbar changeView={this.changeView} quantity={quantity} />
+                        {view === "shop" ? <Shop colors={colors} /> : <Cart items={inCart} />}
+                    </div>
+                );
+            }
+        }
+
+        ReactDOM.render(<App />, document.getElementById("root"));
+
+    </script>
+    {% endraw %}
+</body>
+<script>
+    var button = document.getElementsByClassName('buyButton')
+    console.log(button)
+</script>
+</html>
