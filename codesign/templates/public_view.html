@@ -154,11 +154,16 @@
         // 	4. Forward to some "you-are-logged-out"-page
         // 	5. Done, the Basic Auth header is invalid now
         $.ajax({
-            url: "/pallete",
+            url: "/api/v1/create",
             type: "POST",
             contentType: "application/json",
             data: JSON.stringify(obj),
-            success: function (data) { alert("palette created") }
+            success: function (data) { alert("palette created") },
+            error: function (data) {
+                alert("failed operation")
+            }
+                // console.log(JSON.stringify(data))
+                // alert(data['statusText']) }
         });
     }
 </script>
