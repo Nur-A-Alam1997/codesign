@@ -7,12 +7,11 @@
 
 * change to codesign directory
 
-### create database (only ones):
->python setup.py
-
-
 ### installation:
 >pip install -r requirement.txt
+
+### create database (only ones):
+>python setup.py
 
 ### build:
 >python app.py
