@@ -14,9 +14,6 @@
 ### installation:
 >pip install -r requirement.txt
 
-### create database (only ones):
->python setup.py
-
 ### build:
 >python app.py
 
