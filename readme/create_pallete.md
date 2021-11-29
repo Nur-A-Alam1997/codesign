@@ -17,23 +17,24 @@
 
 * **Data Params**
 
-  ```json
-  {
+```json
+{
       "name": "PalleteCynaPin",
       "dominant": ['1','3'],
       "accent": ['2','4'],
       "state" : true
-}```
+}
+```
 
 * **Success Response:**
 
   * **Code:** 200 <br />
     **Content:** 
-```json
-{
-    "message":"pallete created"
-}
-```
+  ```json
+  {
+      "message":"pallete created"
+  }
+  ```
  
 * **Error Response:**
 
@@ -43,10 +44,10 @@
 * **Sample Call:**
 
   ```
-    curl -X POST -H 'Content-Type: application/json'\
+  curl -X POST -H 'Content-Type: application/json'\
   -d '{"name": "PalleteCynaPin",\
   "dominant": ['1','3'],\
   "accent": ['2','4'],\
   "state" : true}'\
-    http://"admin":"1234"@localhost:5000/api/v1/create
+  http://"admin":"1234"@localhost:5000/api/v1/create
   ```
