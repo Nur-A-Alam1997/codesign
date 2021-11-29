@@ -28,7 +28,7 @@
 > <'http://127.0.0.1:5000/api/v1/bookmark/:pid> -->
 
 ### Problem Statement:
->a REST API to create, manage, and share color palettes. You can use either REST or GraphQL.
+>a REST API to create, manage, and share color palettes.
 
 * **API Users will be able to**:
 >Browse public color palettes without login 
