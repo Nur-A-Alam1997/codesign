@@ -1,3 +1,24 @@
+## Problem Statement:
+
+>* a REST API to create, manage, and share color palettes.
+
+* **API Users will be able to**:
+>* Browse public color palettes without login 
+
+* **Features** <br>
+`[1]`  `Create color palettes`<br>
+`[2]`  `publish them to the public or make them private`<br>
+`[3]`  `Save other’s palettes to favorite`<br>
+
+* **A Palette consists of** <br>
+`[1]`  `1 to 2 dominant color(s)`<br>
+`[2]`  `2 to 4 accent colors(s)`<br>
+`[3]`  `A name`<br>
+`[4]`  `private or public state<br>`
+
+
+
+
 ### clone the file:
 >git clone https://github.com/Nur-A-Alam1997/design.git 
 
@@ -27,22 +48,6 @@
 ### bookmark :
 > <'http://127.0.0.1:5000/api/v1/bookmark/:pid> -->
 
-### Problem Statement:
->* a REST API to create, manage, and share color palettes.
-
-* **API Users will be able to**:
->* Browse public color palettes without login 
-
-* **Features** <br>
-`[1]`  `Create color palettes`<br>
-`[2]`  `publish them to the public or make them private`<br>
-`[3]`  `Save other’s palettes to favorite`<br>
-
-* **A Palette consists of** <br>
-`[1]`  `1 to 2 dominant color(s)`<br>
-`[2]`  `2 to 4 accent colors(s)`<br>
-`[3]`  `A name`<br>
-`[4]`  `private or public state<br>`
 
 ## HTTP Response Codes
 Each response will be returned with one of the following HTTP status codes:
@@ -55,7 +60,7 @@ Each response will be returned with one of the following HTTP status codes:
 * `405` `Method not allowed` The resource being accessed doesn't support the method specified (GET, POST, etc.).
 * `500` `Server Error` An error on the server occurred
 
-* ** Predefined User Data to access Protected route**
+## Predefined User Data to access Protected route:
 
 ```json
 {
