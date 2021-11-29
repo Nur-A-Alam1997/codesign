@@ -23,8 +23,7 @@
       "dominant": ['1','3'],
       "accent": ['2','4'],
       "state" : true
-}
- ```
+}```
 
 * **Success Response:**
 
@@ -44,10 +43,10 @@
 * **Sample Call:**
 
   ```
-curl -X POST -H 'Content-Type: application/json'\
- -d '{"name": "PalleteCynaPin",\
- "dominant": ['1','3'],\
- "accent": ['2','4'],\
- "state" : true}'\
-  http://"admin":"1234"@localhost:5000/api/v1/create
+    curl -X POST -H 'Content-Type: application/json'\
+  -d '{"name": "PalleteCynaPin",\
+  "dominant": ['1','3'],\
+  "accent": ['2','4'],\
+  "state" : true}'\
+    http://"admin":"1234"@localhost:5000/api/v1/create
   ```
