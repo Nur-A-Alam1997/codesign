@@ -38,4 +38,4 @@ class MyPalleteResource(Resource):
         data = json.loads(r)
         
         headers = {'Content-Type': 'text/html'}
-        return make_response(render_template("book_mark.html",data = data ),200,headers)
+        return data

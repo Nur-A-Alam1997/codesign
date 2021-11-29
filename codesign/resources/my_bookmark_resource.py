@@ -29,5 +29,5 @@ class MyBookmarkResource(Resource):
             obj = json.loads(r)
 
             headers = {'Content-Type': 'text/html'}
-            return make_response(render_template("book_mark.html",data = obj ),200,headers)
+            return obj
         return jsonify({'error': "Not found"})  

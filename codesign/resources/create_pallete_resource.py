@@ -37,7 +37,7 @@ class CreatePalleteResource(Resource):
         data = json.loads(r)
 
         headers = {'Content-Type': 'text/html'}
-        return make_response(render_template('public_view.html',data = data ),200,headers)
+        return data
 
     @auth.login_required()
     def post(self):
@@ -46,4 +46,4 @@ class CreatePalleteResource(Resource):
         db.session.add(pallete)
         db.session.commit()   
         print(str(data['accent']))
-        return {'success':True}, 200, {'ContentType':'application/json'} 
+        return {'success':"pallete created"}, 200, {'ContentType':'application/json'} 

@@ -76,7 +76,7 @@ class ManagePalleteResource(Resource):
         data = json.loads(r)
 
         headers = {'Content-Type': 'text/html'}
-        return make_response(render_template("test_edit.html",data = data ),200,headers)
+        return data
 
     @auth.login_required()
     def delete(self,pid):
