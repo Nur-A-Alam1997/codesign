@@ -9,7 +9,7 @@ class ManagePalleteResource(Resource):
     def __init__(self):
         pass
 
-    @auth.login_required
+    @auth.login_required(optional = True)
     def get(self,pid):
         
         single_pallete = Pallete.query.get(pid)
