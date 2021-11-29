@@ -121,9 +121,9 @@
     **Content:** `{ error : "Pallete doesn't exist" }`
 
   OR
-
+<!-- 
   * **Code:** 401 UNAUTHORIZED <br />
-    **Content:** `{ error : "You are unauthorized to make this request." }`
+    **Content:** `{ error : "You are unauthorized to make this request." }` -->
 
 
 

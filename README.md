@@ -34,15 +34,15 @@
 *Browse public color palettes without login 
 
 * **Features** <br>
-`[1]` `Create color palettes`<br>
-`[2]` `publish them to the public or make them private`<br>
-`[3]` `Save other’s palettes to favorite`<br>
+`[1]`  `Create color palettes`<br>
+`[2]`  `publish them to the public or make them private`<br>
+`[3]`  `Save other’s palettes to favorite`<br>
 
 * **A Palette consists of** <br>
-`[1]` `1 to 2 dominant color(s)`<br>
-`[2]` `2 to 4 accent colors(s)`<br>
-`[3]` `A name`<br>
-`[4]` `private or public state<br>`
+`[1]`  `1 to 2 dominant color(s)`<br>
+`[2]`  `2 to 4 accent colors(s)`<br>
+`[3]`  `A name`<br>
+`[4]`  `private or public state<br>`
 
 ## HTTP Response Codes
 Each response will be returned with one of the following HTTP status codes:
