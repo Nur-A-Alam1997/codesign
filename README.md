@@ -55,6 +55,15 @@ Each response will be returned with one of the following HTTP status codes:
 * `405` `Method not allowed` The resource being accessed doesn't support the method specified (GET, POST, etc.).
 * `500` `Server Error` An error on the server occurred
 
+* ** Predefined User Data to access Protected route**
+
+```json
+{
+    "admin": "1234",
+    "user1": "1234",
+    "user2": "1234",
+}
+```
 
 ### Dashboard[]
 - **[<code>GET</code> Dashboard list](/readme/dashboard.md)**
