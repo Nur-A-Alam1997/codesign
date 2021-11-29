@@ -28,10 +28,10 @@
 > <'http://127.0.0.1:5000/api/v1/bookmark/:pid> -->
 
 ### Problem Statement:
->a REST API to create, manage, and share color palettes.
+>* a REST API to create, manage, and share color palettes.
 
 * **API Users will be able to**:
-*Browse public color palettes without login 
+>* Browse public color palettes without login 
 
 * **Features** <br>
 `[1]`  `Create color palettes`<br>
