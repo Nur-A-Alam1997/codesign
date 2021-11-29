@@ -33,7 +33,7 @@
 * **API Users will be able to**:
 *Browse public color palettes without login 
 
-* **Features**:
+* **Features** <br>
 `[1]` `Create color palettes`<br>
 `[2]` `publish them to the public or make them private`<br>
 `[3]` `Save other’s palettes to favorite`<br>
