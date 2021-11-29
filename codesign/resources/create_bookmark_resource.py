@@ -22,11 +22,13 @@ class CreateBookmarkResource(Resource):
         try:
             favour.remove(pid)
             book_mark.fav = str(",".join(favour))
+            db.session.commit()        
+            return jsonify({'message': f'successfully removed {pid}'})
+
         except:
             fav = book_mark.fav
             fav = fav + f",{pid}"
             book_mark.fav = fav
             print("Something went wrong")
-        finally:
             db.session.commit()        
-        return jsonify({'message': f'successful changes'})
+        return jsonify({'message': f'successfully added {pid}'})

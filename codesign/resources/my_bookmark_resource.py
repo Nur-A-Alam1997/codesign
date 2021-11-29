@@ -30,4 +30,4 @@ class MyBookmarkResource(Resource):
 
             headers = {'Content-Type': 'text/html'}
             return obj
-        return jsonify({'error': "Not found"})  
+        return {'error': "Not found"},404

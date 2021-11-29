@@ -14,7 +14,7 @@ class ManagePalleteResource(Resource):
         
         single_pallete = Pallete.query.get(pid)
         if not single_pallete:
-            return jsonify({'message': 'not found'})   
+            return {'message': 'not found'},404
         dominant = Dominant.query.all()
         accent = Accent.query.all()
         
@@ -93,7 +93,7 @@ class ManagePalleteResource(Resource):
         print("i gorhit")
         edit_pallete = Pallete.query.filter_by(id = pid,owner= auth.current_user()).first()   
         if not edit_pallete:   
-            return jsonify({'message': 'you are not authorized to...'})
+            return jsonify({'message': 'you are not authorized to or does not exists...'})
         print(edit_pallete.name)
 
         data = request.json

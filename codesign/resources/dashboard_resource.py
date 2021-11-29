@@ -6,36 +6,36 @@ import  json
 
 from codesign.models.pallete import Pallete
 
-class MyPalleteResource(Resource):
+
+class Dashboard(Resource):
 
     def __init__(self):
         pass
 
-    @auth.login_required
+    @auth.login_required(optional = True)
     def get(self):
 
-        my_pallete = Pallete.query.filter_by( owner = auth.current_user()).all()
-        print(my_pallete)
-        print("Hello, {}!".format(auth.current_user()))
-        if not my_pallete:
-            return jsonify({"message":"not found"})
-        result = []
+        dashboard = Pallete.query.filter_by( state = True).all()
+        if not dashboard :
+            return {"message":"not found"},404
+        print(dashboard)
+        result = []   
 
-        for pallete in my_pallete:   
+        for pallete in dashboard:   
             pallete_data = {}   
             pallete_data['id'] = pallete.id 
-            pallete_data['owner'] = pallete.owner 
+            pallete_data['owner'] = pallete.owner
             pallete_data['name'] = pallete.name 
             pallete_data['dominant'] = pallete.dominant
             pallete_data['accent'] = pallete.accent
             pallete_data['state'] = pallete.state
             result.append(pallete_data)
-            accent_list = pallete_data['accent'].strip('[]').replace('\'', '').replace(' ', '').split(',')
-            print(type(accent_list))
+            # accent_list =pallete_data['accent'].strip('[]').replace('\'', '').replace(' ', '').split(',')
+            # print(type(accent_list))
 
         json_onject = {"pallete":result}
         r = json.dumps(json_onject)
         data = json.loads(r)
-        
         headers = {'Content-Type': 'text/html'}
         return data
+

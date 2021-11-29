@@ -17,6 +17,7 @@ auth = HTTPBasicAuth()
 USER_DATA = {
     "admin": "1234",
     "user1": "1234",
+    "user2": "1234",
 }
 
 @auth.verify_password
