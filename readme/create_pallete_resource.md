@@ -4,7 +4,7 @@
 
 * **URL**
 
-  /api/v1/create
+  `/api/v1/create`
 
 * **Method:**
 
@@ -16,7 +16,7 @@
 
 * **Data Params**
 
-  None
+  `None`
 
 * **Success Response:**
 

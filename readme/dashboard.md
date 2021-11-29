@@ -4,7 +4,7 @@
 
 * **URL**
 
-  /api/v1/dashboard
+  `/api/v1/dashboard`
 
 * **Method:**
 
@@ -14,17 +14,17 @@
 
    **Required:**
  
-   None
+   `None`
 
 * **Data Params**
 
-  None
+  `None`
 
 * **Success Response:**
 
   * **Code:** 200 <br />
     **Content:** 
-    ``` json
+``` json
         {
             "pallete": [
                 {

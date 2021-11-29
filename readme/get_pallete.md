@@ -4,7 +4,7 @@
 
 * **URL**
 
-  /api/v1/pallete/:pid
+  `/api/v1/pallete/:pid`
 
 * **Method:**
 
@@ -18,7 +18,7 @@
 
 * **Data Params**
 
-  None
+  `None`
 
 * **Success Response:**
 
@@ -113,7 +113,7 @@
     "user": "admin",
     "bookmark": null
 }
-
+```
  
 * **Error Response:**
 

@@ -4,7 +4,7 @@
 
 * **URL**
 
-  /api/v1/my_bookmark
+  `/api/v1/my_bookmark`
 
 * **Method:**
 
@@ -24,7 +24,7 @@
 
   * **Code:** 200 <br />
     **Content:**
-    ```json
+```json
 {
     "pallete": [
         {
@@ -39,7 +39,7 @@
         }
     ]
 }
-
+```
  
 * **Error Response:**
 
@@ -52,5 +52,7 @@
     **Content:** `{ error : "You are unauthorized to make this request." }`
 
 * **Sample Call:**
-```
-curl  http://"user1":"1234"@localhost:5000/api/v1/my_bookmark
+
+  ```
+  curl  http://"user1":"1234"@localhost:5000/api/v1/my_bookmark
+  ```

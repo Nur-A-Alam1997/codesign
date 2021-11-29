@@ -4,7 +4,7 @@
 
 * **URL**
 
-  /api/v1/bookmark:pid
+  `/api/v1/bookmark:pid`
 
 * **Method:**
 
@@ -18,7 +18,7 @@
 
 * **Data Params**
 
-  None
+  `None`
 
 * **Success Response:**
 
@@ -41,6 +41,6 @@
   ```
   curl -X PUT -H "Content-Type : application/json"\
     -d'{pid:1}' http://"user1":"1234"@localhost:5000/api/v1/bookmark/1
-
+  ```
 
   
