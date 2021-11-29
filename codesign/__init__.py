@@ -28,6 +28,7 @@ def verify(username, password):
 
 # from codesign.resources.resource import PrivateResource,CreatePalleteResource,CreateBookmarkResource,ManagePalleteResource,MyBookmarkResource,MyPalleteResource,Dashboard, Logout
 
+from codesign.resources.unauthorized_pallete_resource import UnauthPalleteResource
 from codesign.resources.create_bookmark_resource import CreateBookmarkResource
 from codesign.resources.create_pallete_resource import CreatePalleteResource
 from codesign.resources.manage_pallete_resource import ManagePalleteResource
@@ -41,6 +42,7 @@ from codesign.resources.logout_resource import Logout
 api.add_resource(CreatePalleteResource, '/create')
 api.add_resource(CreateBookmarkResource, '/bookmark/<pid>')
 api.add_resource(ManagePalleteResource, '/pallete/<pid>')
+api.add_resource(UnauthPalleteResource, '/UnAuthPallete/<pid>')
 api.add_resource(MyBookmarkResource, '/my_bookmark')
 api.add_resource(MyPalleteResource, '/my_pallete')
 api.add_resource(Dashboard, '/dashboard')
