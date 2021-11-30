@@ -27,7 +27,7 @@
 ### installation:
 >pip install -r requirement.txt
 
-### create database (only ones):
+### create database (only ones if it is not there in codesign folder):
 >python setup.py
 
 ### build:
